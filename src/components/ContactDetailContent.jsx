@@ -104,56 +104,66 @@ export default function ContactDetailContent() {
             Profile
           </div>
 
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-4">
+          <div className="flex items-start gap-5 mb-5">
+            {/* Large Profile Picture */}
+            {contact.profilePicture ? (
+              <img
+                src={contact.profilePicture}
+                alt={contact.name}
+                className="w-24 h-24 rounded-full object-cover border-2 border-gray-200 shrink-0"
+              />
+            ) : (
               <div
-                className={`w-16 h-16 rounded-full ${contact.color} text-white text-lg font-bold flex items-center justify-center shrink-0`}
+                className={`w-24 h-24 rounded-full ${contact.color} text-white text-2xl font-bold flex items-center justify-center shrink-0`}
               >
                 {contact.initials}
               </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">{contact.name}</h1>
-                <div className="flex items-center gap-4 mt-1 text-xs text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <UserCheck size={12} className="text-gray-400" />
-                    <span className="text-gray-400">Position</span>
-                    <span className="font-medium text-gray-700 ml-0.5">{contact.role}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Building2 size={12} className="text-gray-400" />
-                    <span className="text-gray-400">Company</span>
-                    <span className="font-medium text-gray-700 ml-0.5">{contact.company}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MapPin size={12} className="text-orange-400" />
-                    <span className="text-gray-400">Branch</span>
-                    <span className="font-medium text-gray-700 ml-0.5">{contact.branch}</span>
-                  </div>
+            )}
+
+            {/* Name, meta, and completion */}
+            <div className="flex-1 min-w-0 pt-1">
+              <div className="flex items-start justify-between mb-1">
+                <h1 className="text-2xl font-bold text-gray-900">{contact.name}</h1>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {contact.tier && (
+                    <span className={`text-[11px] font-semibold px-2.5 py-1 rounded ${getTierColor(contact.tier)}`}>
+                      {contact.tier}
+                    </span>
+                  )}
+                  <span className="text-[11px] font-semibold bg-green-500 text-white px-2.5 py-1 rounded">
+                    {contact.status}
+                  </span>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center gap-1.5">
-              {contact.tier && (
-                <span className={`text-[11px] font-semibold px-2.5 py-1 rounded ${getTierColor(contact.tier)}`}>
-                  {contact.tier}
-                </span>
-              )}
-              <span className="text-[11px] font-semibold bg-green-500 text-white px-2.5 py-1 rounded">
-                {contact.status}
-              </span>
-            </div>
-          </div>
 
-          {/* Profile Completion Bar */}
-          <div className="mb-5">
-            <div className="h-6 bg-gray-100 rounded-full overflow-hidden relative">
-              <div
-                className={`h-full ${getCompletionColor(calculateProfileCompletion(contact))} rounded-full`}
-                style={{ width: `${calculateProfileCompletion(contact)}%` }}
-              />
-              <span className="absolute inset-0 flex items-center px-3 text-[11px] font-semibold text-white">
-                Profile Completion {calculateProfileCompletion(contact)}%
-              </span>
+              <div className="flex items-center gap-4 mb-3 text-xs text-gray-500">
+                <div className="flex items-center gap-1">
+                  <UserCheck size={12} className="text-gray-400" />
+                  <span className="text-gray-400">Position</span>
+                  <span className="font-medium text-gray-700 ml-0.5">{contact.role}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Building2 size={12} className="text-gray-400" />
+                  <span className="text-gray-400">Company</span>
+                  <span className="font-medium text-gray-700 ml-0.5">{contact.company}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <MapPin size={12} className="text-orange-400" />
+                  <span className="text-gray-400">Branch</span>
+                  <span className="font-medium text-gray-700 ml-0.5">{contact.branch}</span>
+                </div>
+              </div>
+
+              {/* Profile Completion Bar */}
+              <div className="h-6 bg-gray-100 rounded-full overflow-hidden relative">
+                <div
+                  className={`h-full ${getCompletionColor(calculateProfileCompletion(contact))} rounded-full`}
+                  style={{ width: `${calculateProfileCompletion(contact)}%` }}
+                />
+                <span className="absolute inset-0 flex items-center px-3 text-[11px] font-semibold text-white">
+                  Profile Completion {calculateProfileCompletion(contact)}%
+                </span>
+              </div>
             </div>
           </div>
 

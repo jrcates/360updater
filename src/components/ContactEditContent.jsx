@@ -13,10 +13,11 @@ import {
   AlertCircle,
   StickyNote,
   PanelRight,
+  Camera,
 } from 'lucide-react'
 import { updateContact } from '../data/contacts'
 import { CONTACT_PHONE_TYPES, DEFAULT_CONTACT_PHONE_TYPE, CONTACT_EMAIL_TYPES, DEFAULT_CONTACT_EMAIL_TYPE } from '../constants/phoneTypes'
-import { resolveBranchPhonesForContact, resolveBranchEmailForContact, resolveCompanyPhonesForContact, resolveCompanyEmailsForContact, calculateProfileCompletion } from '../utils/phoneResolution'
+import { resolveBranchPhonesForContact, resolveCompanyPhonesForContact, resolveCompanyEmailsForContact, calculateProfileCompletion } from '../utils/phoneResolution'
 import PhoneRow from './shared/PhoneRow'
 
 export default function ContactEditDrawer({ contact, onClose, onSaved }) {
@@ -34,6 +35,8 @@ export default function ContactEditDrawer({ contact, onClose, onSaved }) {
     contact?.phones?.length ? contact.phones : []
   )
   const [notes, setNotes] = useState('')
+  const [profilePicture, setProfilePicture] = useState(contact?.profilePicture || null)
+  const fileInputRef = useRef(null)
   const [visible, setVisible] = useState(false)
   const [viewMode, setViewMode] = useState('sidebar') // 'sidebar' | 'modal' | 'fullscreen'
   const [viewMenuOpen, setViewMenuOpen] = useState(false)
@@ -42,12 +45,9 @@ export default function ContactEditDrawer({ contact, onClose, onSaved }) {
   const companyPhones = contact ? resolveCompanyPhonesForContact(contact) : []
   const companyEmails = contact ? resolveCompanyEmailsForContact(contact) : []
   const branchPhones = contact ? resolveBranchPhonesForContact(contact) : []
-  const branchEmail = contact ? resolveBranchEmailForContact(contact) : null
   // Deduplicate branch phones that match company phones
   const seenNumbers = new Set(companyPhones.map((p) => p.number))
   const uniqueBranchPhones = branchPhones.filter((p) => !seenNumbers.has(p.number))
-  const seenEmails = new Set(companyEmails.map((e) => e.address))
-  const uniqueBranchEmail = branchEmail && !seenEmails.has(branchEmail) ? branchEmail : null
 
   useEffect(() => {
     requestAnimationFrame(() => setVisible(true))
@@ -109,6 +109,19 @@ export default function ContactEditDrawer({ contact, onClose, onSaved }) {
     setTimeout(onClose, 300)
   }
 
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => setProfilePicture(reader.result)
+    reader.readAsDataURL(file)
+  }
+
+  const removeProfilePicture = () => {
+    setProfilePicture(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
   const updateContactPhone = (index, updated) => {
     const next = [...contactPhones]
     next[index] = updated
@@ -140,6 +153,7 @@ export default function ContactEditDrawer({ contact, onClose, onSaved }) {
     updateContact(contact.id, {
       name: fullName || contact.name,
       initials,
+      profilePicture,
       role: positions[0] || contact.role,
       company,
       branch,
@@ -147,7 +161,7 @@ export default function ContactEditDrawer({ contact, onClose, onSaved }) {
       phones: contactPhones,
       emails: contactEmails,
       workEmail: contactEmails.find((e) => e.primary)?.value || contactEmails[0]?.value || '',
-      hasEmail: contactEmails.length > 0 || !!branchEmail || companyEmails.length > 0,
+      hasEmail: contactEmails.length > 0 || companyEmails.length > 0,
       hasPhone: contactPhones.length > 0 || branchPhones.length > 0 || companyPhones.length > 0,
       notes,
     })
@@ -337,6 +351,58 @@ export default function ContactEditDrawer({ contact, onClose, onSaved }) {
               Personal Information
             </div>
 
+            {/* Profile Picture */}
+            <div className="flex items-center gap-4 mb-5">
+              <div className="relative group">
+                {profilePicture ? (
+                  <img
+                    src={profilePicture}
+                    alt="Profile"
+                    className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                  />
+                ) : (
+                  <div className={`w-16 h-16 rounded-full ${contact.color} text-white text-lg font-bold flex items-center justify-center`}>
+                    {contact.initials}
+                  </div>
+                )}
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute inset-0 w-16 h-16 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                >
+                  <Camera size={18} />
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProfilePictureChange}
+                  className="hidden"
+                />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-900">Profile Photo</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                  >
+                    Upload
+                  </button>
+                  {profilePicture && (
+                    <>
+                      <span className="text-gray-300">|</span>
+                      <button
+                        onClick={removeProfilePicture}
+                        className="text-xs font-medium text-red-500 hover:text-red-600 transition-colors"
+                      >
+                        Remove
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -470,23 +536,6 @@ export default function ContactEditDrawer({ contact, onClose, onSaved }) {
                       />
                     </div>
                   ))}
-                </div>
-              </div>
-            )}
-
-            {uniqueBranchEmail && (
-              <div className="mb-5">
-                <p className="text-sm font-medium text-gray-700 mb-2">From Branch</p>
-                <div className="flex items-center gap-2">
-                  <div className="px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 bg-gray-50 w-40">
-                    Branch Email
-                  </div>
-                  <input
-                    type="text"
-                    value={uniqueBranchEmail}
-                    readOnly
-                    className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 bg-gray-50 cursor-not-allowed"
-                  />
                 </div>
               </div>
             )}

@@ -8,6 +8,8 @@ import ContactsContent from './components/ContactsContent'
 import ContactDetailContent from './components/ContactDetailContent'
 import QuotesContent from './components/QuotesContent'
 import QuoteDetailContent from './components/QuoteDetailContent'
+import OrdersContent from './components/OrdersContent'
+import OrderDetailContent from './components/OrderDetailContent'
 import DesignSystemContent from './components/DesignSystemContent'
 import RightSidebar from './components/RightSidebar'
 
@@ -24,6 +26,8 @@ function App() {
         <Route path="/companies/:companyId" element={<CompanyDetailContent />} />
         <Route path="/quotes" element={<QuotesContent />} />
         <Route path="/quotes/:quoteId" element={<QuoteDetailContent />} />
+        <Route path="/orders" element={<OrdersContent />} />
+        <Route path="/orders/:orderId" element={<OrderDetailContent />} />
         <Route path="/design-system" element={<DesignSystemContent />} />
       </Routes>
       <RightSidebar />

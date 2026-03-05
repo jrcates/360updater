@@ -98,11 +98,19 @@ export default function ContactsContent() {
             >
               {/* Top row: avatar + badges + menu */}
               <div className="flex items-start justify-between mb-4">
-                <div
-                  className={`w-14 h-14 rounded-full ${contact.color} text-white text-sm font-bold flex items-center justify-center shrink-0`}
-                >
-                  {contact.initials}
-                </div>
+                {contact.profilePicture ? (
+                  <img
+                    src={contact.profilePicture}
+                    alt={contact.name}
+                    className="w-14 h-14 rounded-full object-cover border-2 border-gray-200 shrink-0"
+                  />
+                ) : (
+                  <div
+                    className={`w-14 h-14 rounded-full ${contact.color} text-white text-sm font-bold flex items-center justify-center shrink-0`}
+                  >
+                    {contact.initials}
+                  </div>
+                )}
                 <div className="flex items-start gap-2">
                   <div className="flex flex-col items-end gap-1">
                     {contact.tier && (
