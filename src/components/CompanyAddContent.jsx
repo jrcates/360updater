@@ -14,6 +14,7 @@ import {
 import { addCompany } from '../data/companies'
 import { CONTACT_PHONE_TYPES, COMPANY_PHONE_TYPES, DEFAULT_CONTACT_PHONE_TYPE } from '../constants/phoneTypes'
 import PhoneRow from './shared/PhoneRow'
+import SidebarToggle from './shared/SidebarToggle'
 
 const COMPANY_TYPE_OPTIONS = ['Customer', 'Vendor', 'Distributor', 'Manufacturer']
 const SUB_TYPE_OPTIONS = ['HVAC Contractor', 'Mechanical Contractor', 'General Contractor', 'Sheet Metal', 'Plumbing']
@@ -213,7 +214,8 @@ export default function CompanyAddContent() {
   return (
     <main className="flex-1 min-w-0 overflow-auto bg-gray-50/80">
       {/* Top breadcrumb bar */}
-      <div className="flex items-center gap-2 px-8 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+      <div className="flex items-center gap-2 px-4 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+        <SidebarToggle />
         <Building2 size={15} className="text-gray-400" />
         <span
           className="text-gray-400 cursor-pointer hover:text-gray-600"

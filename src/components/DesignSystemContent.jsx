@@ -8,6 +8,7 @@ import {
   MoreVertical,
   ArrowRight,
 } from 'lucide-react'
+import SidebarToggle from './shared/SidebarToggle'
 
 const brandColors = [
   { name: 'Indigo 900', class: 'bg-indigo-900', hex: '#312e81', text: 'text-white' },
@@ -116,7 +117,8 @@ export default function DesignSystemContent() {
   return (
     <main className="flex-1 min-w-0 overflow-auto bg-gray-50/80">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 px-8 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+      <div className="flex items-center gap-2 px-4 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+        <SidebarToggle />
         <Palette size={15} className="text-gray-400" />
         <span className="font-medium text-gray-700">Design System</span>
       </div>

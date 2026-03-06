@@ -17,9 +17,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
+  ExternalLink,
 } from 'lucide-react'
 import { quotes } from '../data/quotes'
 import HvacImage from './shared/HvacImage'
+import SidebarToggle from './shared/SidebarToggle'
 
 export default function QuoteDetailContent() {
   const { quoteId } = useParams()
@@ -103,7 +105,8 @@ export default function QuoteDetailContent() {
   return (
     <main className="flex-1 min-w-0 overflow-auto bg-gray-50/80">
       {/* Top breadcrumb bar */}
-      <div className="flex items-center gap-2 px-8 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+      <div className="flex items-center gap-2 px-4 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+        <SidebarToggle />
         <FileText size={15} className="text-gray-400" />
         <span
           className="text-gray-400 cursor-pointer hover:text-gray-600"
@@ -125,9 +128,17 @@ export default function QuoteDetailContent() {
             <ArrowLeft size={16} />
             Back
           </button>
-          <button className="p-2.5 border border-gray-200 rounded-lg text-gray-400 hover:bg-gray-50 transition-colors">
-            <MoreVertical size={16} />
-          </button>
+          <div className="flex items-center gap-2">
+            {!quote.payment && (
+              <button className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors">
+                <ExternalLink size={14} />
+                Continue on Vibrex
+              </button>
+            )}
+            <button className="p-2.5 border border-gray-200 rounded-lg text-gray-400 hover:bg-gray-50 transition-colors">
+              <MoreVertical size={16} />
+            </button>
+          </div>
         </div>
 
         {/* Header Card */}

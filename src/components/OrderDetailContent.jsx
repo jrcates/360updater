@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { orders } from '../data/orders'
 import HvacImage from './shared/HvacImage'
+import SidebarToggle from './shared/SidebarToggle'
 
 export default function OrderDetailContent() {
   const { orderId } = useParams()
@@ -59,7 +60,8 @@ export default function OrderDetailContent() {
   return (
     <main className="flex-1 min-w-0 overflow-auto bg-gray-50/80">
       {/* Top breadcrumb bar */}
-      <div className="flex items-center gap-2 px-8 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+      <div className="flex items-center gap-2 px-4 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+        <SidebarToggle />
         <ShoppingCart size={15} className="text-gray-400" />
         <span
           className="text-gray-400 cursor-pointer hover:text-gray-600"

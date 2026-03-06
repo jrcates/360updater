@@ -24,6 +24,7 @@ import { contacts } from '../data/contacts'
 import { PHONE_TYPE_LABELS, EMAIL_TYPE_LABELS } from '../constants/phoneTypes'
 import { resolveBranchPhonesForContact, resolveBranchEmailForContact, resolveCompanyPhonesForContact, resolveCompanyEmailsForContact, resolveContactCardPhones, calculateProfileCompletion } from '../utils/phoneResolution'
 import ContactEditDrawer from './ContactEditContent'
+import SidebarToggle from './shared/SidebarToggle'
 
 const tabs = [
   { icon: Users, label: 'Overview' },
@@ -61,7 +62,8 @@ export default function ContactDetailContent() {
   return (
     <main className="flex-1 min-w-0 overflow-auto bg-gray-50/80">
       {/* Top breadcrumb bar */}
-      <div className="flex items-center gap-2 px-8 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+      <div className="flex items-center gap-2 px-4 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+        <SidebarToggle />
         <Users size={15} className="text-gray-400" />
         <span
           className="text-gray-400 cursor-pointer hover:text-gray-600"

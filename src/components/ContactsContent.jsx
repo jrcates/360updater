@@ -20,6 +20,7 @@ import {
 import { contacts } from '../data/contacts'
 import { resolveContactCardPhones, calculateProfileCompletion } from '../utils/phoneResolution'
 import { PHONE_TYPE_LABELS } from '../constants/phoneTypes'
+import SidebarToggle from './shared/SidebarToggle'
 
 const ITEMS_PER_PAGE = 9
 
@@ -46,7 +47,8 @@ export default function ContactsContent() {
   return (
     <main className="flex-1 min-w-0 overflow-auto bg-gray-50/80">
       {/* Top breadcrumb bar */}
-      <div className="flex items-center gap-2 px-8 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+      <div className="flex items-center gap-2 px-4 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+        <SidebarToggle />
         <Users size={15} className="text-gray-400" />
         <span className="font-medium text-gray-700">Contacts</span>
       </div>

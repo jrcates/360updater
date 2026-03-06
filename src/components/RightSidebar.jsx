@@ -1,6 +1,6 @@
 import {
   TrendingUp,
-  Clock,
+  FileText,
   Truck,
   User,
   Building2,
@@ -8,6 +8,25 @@ import {
   Square,
   CheckSquare,
 } from 'lucide-react'
+import { quotes } from '../data/quotes'
+import { orders } from '../data/orders'
+
+// Real data calculations
+const deliveredOrders = orders.filter((o) => o.status === 'Delivered')
+const totalRevenue = deliveredOrders.reduce((sum, o) => sum + o.totalPrice, 0)
+
+const activeQuotes = quotes.filter((q) => !q.payment).length
+const awaitingPayment = quotes.filter(
+  (q) => q.workflow?.currentStep === 3 && !q.payment
+).length
+
+const readyOrders = orders.filter(
+  (o) => o.status === 'Production Complete' || o.status === 'Shipped'
+).length
+const shippedOrders = orders.filter((o) => o.status === 'Shipped').length
+
+const formatCurrency = (amount) =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount)
 
 const tierAccounts = [
   {
@@ -68,10 +87,10 @@ export default function RightSidebar() {
         <p className="text-[11px] font-medium text-indigo-300/80 mb-1 uppercase tracking-wide">
           Total Revenue
         </p>
-        <p className="text-3xl font-bold tracking-tight">$42.5k</p>
+        <p className="text-3xl font-bold tracking-tight">{formatCurrency(totalRevenue)}</p>
         <div className="flex items-center gap-1.5 mt-2">
           <TrendingUp size={14} className="text-green-400" />
-          <span className="text-xs text-green-400">+12% this week</span>
+          <span className="text-xs text-green-400">{deliveredOrders.length} delivered order{deliveredOrders.length !== 1 ? 's' : ''}</span>
         </div>
       </div>
 
@@ -79,21 +98,21 @@ export default function RightSidebar() {
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-white rounded-lg border border-gray-200 p-3">
           <p className="text-[11px] text-gray-500 font-medium">Active Quotes</p>
-          <p className="text-2xl font-bold text-gray-900 mt-0.5">100</p>
+          <p className="text-2xl font-bold text-gray-900 mt-0.5">{activeQuotes}</p>
           <div className="flex items-center gap-1 mt-1.5">
-            <Clock size={11} className="text-green-500 shrink-0" />
-            <span className="text-[10px] text-green-600 leading-tight">
-              3 awaiting payment
+            <FileText size={11} className="text-amber-500 shrink-0" />
+            <span className="text-[10px] text-amber-600 leading-tight">
+              {awaitingPayment} awaiting payment
             </span>
           </div>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-3">
           <p className="text-[11px] text-gray-500 font-medium">Ready Orders</p>
-          <p className="text-2xl font-bold text-gray-900 mt-0.5">20</p>
+          <p className="text-2xl font-bold text-gray-900 mt-0.5">{readyOrders}</p>
           <div className="flex items-center gap-1 mt-1.5">
-            <Truck size={11} className="text-gray-400 shrink-0" />
-            <span className="text-[10px] text-gray-500 leading-tight">
-              2 orders are ready for shipment
+            <Truck size={11} className="text-indigo-500 shrink-0" />
+            <span className="text-[10px] text-indigo-600 leading-tight">
+              {shippedOrders} shipped
             </span>
           </div>
         </div>

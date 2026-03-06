@@ -26,6 +26,7 @@ import { companies } from '../data/companies'
 import { PHONE_TYPE_LABELS } from '../constants/phoneTypes'
 import AddBranchModal from './AddBranchModal'
 import CompanyEditDrawer from './CompanyEditContent'
+import SidebarToggle from './shared/SidebarToggle'
 
 const tabs = [
   { icon: Building2, label: 'Overview' },
@@ -89,7 +90,8 @@ export default function CompanyDetailContent() {
   return (
     <main className="flex-1 min-w-0 overflow-auto bg-gray-50/80">
       {/* Top breadcrumb bar */}
-      <div className="flex items-center gap-2 px-8 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+      <div className="flex items-center gap-2 px-4 py-3 text-sm text-gray-500 border-b border-gray-200 bg-white">
+        <SidebarToggle />
         <Building2 size={15} className="text-gray-400" />
         <span className="text-gray-400 cursor-pointer hover:text-gray-600" onClick={() => navigate('/companies')}>Companies</span>
         <span className="text-gray-300">/</span>
